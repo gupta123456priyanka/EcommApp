@@ -8,6 +8,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -19,13 +23,19 @@ import com.self.ecom.Constants.PADDING_OUTERMOST_EACH_SCREEN
 import com.self.ecom.R
 import com.self.ecom.component.ButtonComponent
 import com.self.ecom.component.ImageComponent
+import com.self.ecom.component.OutlinedTextFieldComponent
 import com.self.ecom.component.SpacerComponent
 import com.self.ecom.component.TextComponent
-import com.self.ecom.component.TextFieldComponent
 
 @Composable
 fun LoginScreen(modifier: Modifier = Modifier, onClickLoginBtn: () -> Unit) {
+    var email by remember {
+        mutableStateOf("")
+    }
 
+    var password by remember {
+        mutableStateOf("")
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -49,12 +59,21 @@ fun LoginScreen(modifier: Modifier = Modifier, onClickLoginBtn: () -> Unit) {
                 .padding(8.dp)
                 .height(200.dp), R.drawable.ic_signup
         )
-
-        TextFieldComponent(initVal = "", labelVal = stringResource(R.string.email_address))
+        OutlinedTextFieldComponent(
+            value = email,
+            labelVal = stringResource(R.string.email_address),
+            onValueChange = {
+                email = it
+            })
         SpacerComponent(heightVal = 20.dp)
-        TextFieldComponent(initVal = "", labelVal = stringResource(R.string.password))
+        OutlinedTextFieldComponent(
+            value = password,
+            labelVal = stringResource(R.string.password),
+            onValueChange = {
+                password = it
+            })
         SpacerComponent(heightVal = 20.dp)
-        ButtonComponent(textVal = "Login", isFilled = true, onClick = onClickLoginBtn)
+        ButtonComponent(textVal = "Login", isFilled = true, onClick = onClickLoginBtn, isEnabled = true)
 
     }
 }

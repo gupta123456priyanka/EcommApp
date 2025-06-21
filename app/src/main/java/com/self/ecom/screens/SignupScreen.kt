@@ -1,63 +1,111 @@
 package com.self.ecom.screens
 
+import android.R.attr.name
+import android.R.attr.password
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.self.ecom.AppUtil
 import com.self.ecom.Constants.BG_COLOR
 import com.self.ecom.Constants.PADDING_OUTERMOST_EACH_SCREEN
 import com.self.ecom.R
 import com.self.ecom.component.ButtonComponent
-import com.self.ecom.component.ImageComponent
+import com.self.ecom.component.ImageComponentMiddleScreen
+import com.self.ecom.component.OutlinedTextFieldComponent
 import com.self.ecom.component.SpacerComponent
-import com.self.ecom.component.TextComponent
-import com.self.ecom.component.TextFieldComponent
+import com.self.ecom.component.TextComponentH1
+import com.self.ecom.component.TextComponentH2
+import com.self.ecom.viewmodel.AuthViewModel
 
 @Composable
 fun SignupScreen(
     modifier: Modifier = Modifier,
-    onClickSignupBtn: () -> Unit
+    onClickSignupBtn: () -> Unit,
+    authViewModel: AuthViewModel = viewModel()
 ) {
     Column(
         modifier = Modifier
-            .fillMaxSize().background(BG_COLOR)
+            .fillMaxSize()
+            .background(BG_COLOR)
             .padding(PADDING_OUTERMOST_EACH_SCREEN),
         verticalArrangement = Arrangement.Center
     ) {
-        TextComponent(
-            textVal = stringResource(R.string.hello_there),
-            fontWeight = FontWeight.Bold, fontSizeVal = 30.sp
-        )
-        SpacerComponent(heightVal = 10.dp)
-        TextComponent(
-            textVal = stringResource(R.string.create_an_account),
-            fontSizeVal = 22.sp
-        )
-        SpacerComponent(heightVal = 20.dp)
-        ImageComponent(
-            Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-                .height(200.dp), R.drawable.ic_signup
-        )
+        val context = LocalContext.current
+        var email by remember { mutableStateOf("") }
+        var password by remember { mutableStateOf("") }
+        var name: String by remember { mutableStateOf("") }
+        var isLoading: Boolean by remember { mutableStateOf(false) }
 
-        TextFieldComponent(initVal = "", labelVal = stringResource(R.string.email_address))
+        TextComponentH1(textVal = stringResource(R.string.hello_there))
+        SpacerComponent(heightVal = 10.dp)
+        TextComponentH2(textVal = stringResource(R.string.create_an_account))
         SpacerComponent(heightVal = 20.dp)
-        TextFieldComponent(initVal = "", labelVal = stringResource(R.string.full_name))
+        ImageComponentMiddleScreen(R.drawable.ic_signup)
+
+        OutlinedTextFieldComponent(
+            value = email,
+            labelVal = stringResource(R.string.email_address),
+            onValueChange = { email = it })
         SpacerComponent(heightVal = 20.dp)
-        TextFieldComponent(initVal = "", labelVal = stringResource(R.string.password))
+        OutlinedTextFieldComponent(
+            value = name,
+            labelVal = stringResource(R.string.full_name),
+            onValueChange = { name = it })
         SpacerComponent(heightVal = 20.dp)
-        ButtonComponent(textVal = "Signup", isFilled = true, onClick = onClickSignupBtn)
+        OutlinedTextFieldComponent(
+            value = password,
+            labelVal = stringResource(R.string.password),
+            onValueChange = { password = it })
+        SpacerComponent(heightVal = 20.dp)
+
+        ButtonComponent(textVal = "Signup", isFilled = true, onClick = {
+            isLoading = true
+            authViewModel.signup(
+                context = context,
+                email = email,
+                password = password,
+                name = name,
+                onResult = { successOrFailureBoolean, errorMessage ->
+                    if (successOrFailureBoolean) {
+                        isLoading = false
+                        AppUtil.showToast(context, msg = "Success" ?: "Signup success")
+                        // go to console>authentication and check if user exits
+                        // also go to firestore database to check if data is in database
+                        // account is created
+                        onClickSignupBtn()
+
+                    } else {
+                        isLoading = false
+                        // account is not created
+                        AppUtil.showToast(
+                            context,
+                            msg = email + " " + errorMessage ?: "Signup failed"
+                        )
+                    }
+                })
+        }, isEnabled = !isLoading)
+//        if (isLoading) {
+//            Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+//                CircularProgressIndicator(
+//                    modifier = Modifier
+//                        .width(40.dp)
+//                        .height(40.dp)
+//                )
+//            }
+//        }
 
     }
 }
@@ -65,5 +113,9 @@ fun SignupScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun SignupScreenPrev() {
-    SignupScreen(onClickSignupBtn = {})
+    SignupScreen(
+        onClickSignupBtn = {},
+        modifier = TODO(),
+        authViewModel = TODO()
+    )
 }

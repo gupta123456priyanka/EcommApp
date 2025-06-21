@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,37 +20,33 @@ import com.self.ecom.ui.theme.White
 
 @Composable
 fun ButtonComponent(
-    modifier: Modifier = Modifier, textVal: String,
+    modifier: Modifier = Modifier
+        .fillMaxWidth()
+        .wrapContentHeight()
+        .padding(4.dp), textVal: String,
     isFilled: Boolean = false,
-    onClick: () -> Unit
-
+    onClick: () -> Unit,
+    isEnabled: Boolean
 ) {
     val textColor = if (isFilled) White else Blue30
-    val buttonColor = if (isFilled) Blue30 else White
+    val bgColor = ButtonDefaults.buttonColors(
+        disabledContainerColor = MaterialTheme.colorScheme.primary,
+        containerColor = if (isFilled) Blue30 else White
+    )
+
     if (isFilled) {
-        Button(
-            onClick = onClick, modifier = modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .padding(4.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = buttonColor
-            )
-        ) {
-            ButtonInsideComposable(
-                textVal = textVal,
-                textColor = textColor
-            )
+        Button(onClick = onClick, modifier = modifier, colors = bgColor, enabled = isEnabled) {
+            ButtonInsideComposable(textVal = textVal, textColor = textColor)
         }
     } else {
         OutlinedButton(
-            onClick = onClick, modifier = modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .padding(4.dp), colors = ButtonDefaults.buttonColors(
-                containerColor = buttonColor
-            )
-        ) { ButtonInsideComposable(textVal = textVal, textColor = textColor) }
+            onClick = onClick,
+            modifier = modifier,
+            colors = bgColor,
+            enabled = isEnabled
+        ) {
+            ButtonInsideComposable(textVal = textVal, textColor = textColor)
+        }
     }
 }
 
@@ -76,11 +73,11 @@ fun ButtonInsideComposable(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun OutlinedButtonCompPrev() {
-    ButtonComponent(textVal = "Login", isFilled = true, onClick = {})
+    ButtonComponent(textVal = "Login", isFilled = true, onClick = {}, isEnabled = true)
 }
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun ButtonComponentPrev() {
-    ButtonComponent(textVal = "Signup", isFilled = false, onClick = {})
+    ButtonComponent(textVal = "Signup", isFilled = false, onClick = {}, isEnabled = true)
 }

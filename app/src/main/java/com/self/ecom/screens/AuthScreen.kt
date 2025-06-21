@@ -53,9 +53,9 @@ fun AuthScreen(
                 fontSizeVal = 16.sp
             )
             SpacerComponent(heightVal = 20.dp)
-            ButtonComponent(textVal = "Login", isFilled = true, onClick = onClickLogin)
+            ButtonComponent(textVal = "Login", isFilled = true, onClick = onClickLogin, isEnabled = true)
             SpacerComponent(heightVal = 10.dp)
-            ButtonComponent(textVal = "Signup", isFilled = false, onClick = onClickSignup)
+            ButtonComponent(textVal = "Signup", isFilled = false, onClick = onClickSignup, isEnabled = true)
         }
     }
 }

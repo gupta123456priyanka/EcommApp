@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun TextComponent(
     modifier: Modifier = Modifier,
-    textVal: String, fontSizeVal: TextUnit=16.sp,
+    textVal: String, fontSizeVal: TextUnit = 16.sp,
     fontFamily: FontFamily = FontFamily.Monospace,
     fontWeight: FontWeight = FontWeight.Normal,
     textAlign: TextAlign = TextAlign.Center,
@@ -29,5 +29,21 @@ fun TextComponent(
             textAlign = textAlign
         ),
         color = color
+    )
+}
+
+@Composable
+fun TextComponentH1(textVal: String) {
+    TextComponent(
+        textVal = textVal,
+        fontWeight = FontWeight.Bold, fontSizeVal = 30.sp
+    )
+}
+
+@Composable
+fun TextComponentH2(textVal: String) {
+    TextComponent(
+        textVal = textVal,
+        fontSizeVal = 22.sp
     )
 }
