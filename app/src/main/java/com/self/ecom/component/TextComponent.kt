@@ -8,6 +8,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import com.self.ecom.ui.theme.Black
@@ -32,6 +33,35 @@ fun TextComponent(
         ),
         color = color
     )
+}
+
+@Composable
+fun TextComponentMoreParams(
+    modifier: Modifier = Modifier,
+    textVal: String, fontSizeVal: TextUnit = 16.sp,
+    fontFamily: FontFamily = FontFamily.Monospace,
+    fontWeight: FontWeight = FontWeight.Normal,
+    textAlign: TextAlign = TextAlign.Center,
+    color: Color = Color.Black,
+
+    overflow: TextOverflow = TextOverflow.Ellipsis,
+    maxLines: Int = 1,
+    style: TextStyle = TextStyle(
+        fontSize = fontSizeVal,
+        fontFamily = fontFamily,
+        fontWeight = fontWeight,
+        textAlign = textAlign
+    )
+) {
+    Text(
+        modifier = modifier,
+        text = textVal, fontSize = fontSizeVal,
+        style = style,
+        color = color,
+        overflow = overflow,
+        maxLines = maxLines,
+
+        )
 }
 
 @Composable
@@ -62,7 +92,7 @@ fun TextComponentH3Black(textVal: String, textColor: Color = Black, modifier: Mo
 }
 
 @Composable
-fun TextComponentH3White(textVal: String ) {
+fun TextComponentH3White(textVal: String) {
     TextComponent(
         textVal = textVal,
         fontSizeVal = 10.sp,
@@ -71,7 +101,7 @@ fun TextComponentH3White(textVal: String ) {
 }
 
 @Composable
-fun TextComponentH4White(textVal: String ) {
+fun TextComponentH4White(textVal: String) {
     TextComponent(
         textVal = textVal,
         fontSizeVal = 7.sp,
@@ -79,8 +109,9 @@ fun TextComponentH4White(textVal: String ) {
         textAlign = TextAlign.Center
     )
 }
+
 @Composable
-fun TextComponentH2White(textVal: String ) {
+fun TextComponentH2White(textVal: String) {
     TextComponent(
         textVal = textVal,
         fontSizeVal = 22.sp,
