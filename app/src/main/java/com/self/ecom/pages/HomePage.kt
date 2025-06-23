@@ -1,5 +1,7 @@
 package com.self.ecom.pages
 
+//import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,9 +27,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.tasks.Task
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.DocumentSnapshot
@@ -40,7 +42,9 @@ import com.self.ecom.component.ImageComponent
 import com.self.ecom.component.SpacerComponent
 import com.self.ecom.component.TextComponent
 import com.self.ecom.component.TextComponentH3Black
+import com.self.ecom.model.CategoryModel
 import com.self.ecom.ui.theme.White
+import com.self.ecom.viewmodel.CategoryViewModel
 
 @Composable
 fun HomePage(modifier: Modifier = Modifier, onClickCategory: (CategoryModel) -> Unit) {
@@ -68,14 +72,19 @@ fun HomePage(modifier: Modifier = Modifier, onClickCategory: (CategoryModel) -> 
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-private fun HomePagePr() {
-    HomePage(onClickCategory = {})
-}
+//@Preview(showBackground = true, showSystemUi = true)
+//@Composable
+//private fun HomePagePr() {
+//    HomePage(onClickCategory = {})
+//}
 
 @Composable
-fun CategoriesView(modifier: Modifier = Modifier, onClickCategory: (CategoryModel) -> Unit) {
+fun CategoriesView(
+    modifier: Modifier = Modifier, onClickCategory: (CategoryModel) -> Unit
+) {
+    val c = LocalContext.current
+    val viewModel: CategoryViewModel = viewModel(c as ComponentActivity)
+
     var categoryList: List<CategoryModel> by remember {
         mutableStateOf<List<CategoryModel>>(
             emptyList()
@@ -93,8 +102,9 @@ fun CategoriesView(modifier: Modifier = Modifier, onClickCategory: (CategoryMode
                     categoryList = task.result?.documents?.mapNotNull { doc: DocumentSnapshot? ->
                         doc?.toObject(CategoryModel::class.java)
                     }!!
+                    viewModel.setAllCategories(categoryList)
                 } else {
-                    AppUtil.showToast(msg = "categories is nul", context = context)
+                    AppUtil.showToast(msg = "categories is null", context = context)
                 }
             }
     }
@@ -102,44 +112,24 @@ fun CategoriesView(modifier: Modifier = Modifier, onClickCategory: (CategoryMode
     // lazy row is used instead of pager bcoz we need name to be shown with image
     LazyRow(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
         items(categoryList) { item ->
+
             CategoryItem(item, onClickCategory = onClickCategory)
         }
     }
-    /*
-    Column {
-        val pagerState = rememberPagerState(initialPage = 0) {
-            categoryList.size
-        }
-        HorizontalPager(state = pagerState, pageSpacing = 24.dp) { index: Int ->
-            ImageComponent(
-                url = categoryList.get(index).imageUrl, modifier = modifier
-                    .clip(
-                        RoundedCornerShape(16.dp)
-                    )
-            )
-        }
-        SpacerComponent(heightVal = 10.dp)
-        DotsIndicator(
-            pagerState = pagerState,
-            dotCount = categoryList.size,
-            modifier = Modifier,
-            type = ShiftIndicatorType(
-                dotsGraphic = DotGraphic(
-                    color = MaterialTheme.colorScheme.primary,
-                    size = 10.dp
-                )
-            )
-        )
-    }*/
 }
 
 @Composable
 fun CategoryItem(categoryModel: CategoryModel, onClickCategory: (CategoryModel) -> Unit) {
+    val c = LocalContext.current
+    val viewModel: CategoryViewModel = viewModel(c as ComponentActivity)
 
     Card(
         Modifier
             .size(110.dp)
-            .clickable(onClick = { onClickCategory(categoryModel) }),
+            .clickable(onClick = {
+//                viewModel.selectedCategory.value = categoryModel // if we want to sen whole model
+                onClickCategory(categoryModel) // if we want to send only few properties of model
+            }),
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(4.dp),
         colors = CardDefaults.cardColors(contentColor = MaterialTheme.colorScheme.primary)
@@ -164,5 +154,3 @@ fun CategoryItem(categoryModel: CategoryModel, onClickCategory: (CategoryModel) 
         }
     }
 }
-
-data class CategoryModel(val id: String = "", val name: String = "", val imageUrl: String = "")

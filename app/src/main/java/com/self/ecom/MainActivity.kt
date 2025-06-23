@@ -14,6 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.self.ecom.ui.theme.EcommAppTheme
 import com.self.ecom.ui.theme.White
+//import dagger.hilt.android.AndroidEntryPoint
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

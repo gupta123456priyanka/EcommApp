@@ -3,6 +3,11 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.gms.google.services)
+
+
+//    alias(libs.plugins.hilt.android)
+//    kotlin("kapt")
+//    id("kotlin-kapt")
 }
 
 android {
@@ -69,4 +74,9 @@ dependencies {
 
     // dot indicator
     implementation("com.tbuonomo:dotsindicator:5.1.0")
+
+
+//    implementation(libs.hilt)
+//    kapt(libs.hilt.compiler)
+//    implementation(libs.hilt.navigation.compose)
 }

@@ -28,8 +28,8 @@ import com.self.ecom.Constants.BG_COLOR
 import com.self.ecom.component.ButtonComponent
 import com.self.ecom.component.TextComponent
 import com.self.ecom.component.TextComponentH3White
+import com.self.ecom.model.CategoryModel
 import com.self.ecom.pages.CartPage
-import com.self.ecom.pages.CategoryModel
 import com.self.ecom.pages.FavouritePage
 import com.self.ecom.pages.HomePage
 import com.self.ecom.pages.ProfilePage

@@ -1,9 +1,15 @@
 package com.self.ecom
 
+import android.R.attr.category
+import androidx.activity.ComponentActivity
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -11,11 +17,14 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
+import com.self.ecom.component.TextComponent
 import com.self.ecom.pages.CategoryProductsPage
 import com.self.ecom.screens.AuthScreen
 import com.self.ecom.screens.HomeScreen
 import com.self.ecom.screens.LoginScreen
 import com.self.ecom.screens.SignupScreen
+import com.self.ecom.ui.theme.White
+import com.self.ecom.viewmodel.CategoryViewModel
 
 @Composable
 fun AppNavGraph(modifier: Modifier = Modifier) {
@@ -23,7 +32,7 @@ fun AppNavGraph(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     val isLoggedIn = Firebase.auth.currentUser != null
     val startDestination = if (isLoggedIn) Screens.Home_Screen.route else Screens.Auth_Screen.route
-
+    val viewModel: CategoryViewModel = viewModel(context as ComponentActivity)
     NavHost(
         modifier = Modifier.fillMaxSize(),
         navController = navController,
@@ -46,9 +55,11 @@ fun AppNavGraph(modifier: Modifier = Modifier) {
                     }
                 }
             }, onClickCategory = { categoryModel ->
-                navController.navigate(
-                    route = Screens.CategoryProducts_Screen.route + "/${categoryModel.id}"
-                )
+//                navController.navigate(
+//                    route = Screens.CategoryProducts_Screen.route + "/${categoryModel.id}"
+//                )
+                navController.navigate(Screens.CategoryProducts_Screen.createRoute(categoryModel.id))
+
             })
         }
         composable(route = Screens.Signup_Screen.route) {
@@ -83,15 +94,27 @@ fun AppNavGraph(modifier: Modifier = Modifier) {
             })
         }
         composable(
-            route = Screens.CategoryProducts_Screen.route + "/{${ScreenArguments.CATEGORY_ID}}",
+            route = Screens.CategoryProducts_Screen.route,
             arguments = listOf(
                 navArgument(name = ScreenArguments.CATEGORY_ID.name) {
                     type = NavType.StringType
                 }
-            )) {
-           it.arguments?.getString(ScreenArguments.CATEGORY_ID.name).also { categoryId->
+            )) { backStackEntry ->
 
-                CategoryProductsPage(categoryId = categoryId.toString())
+            val categoryId = backStackEntry
+                .arguments?.getString(ScreenArguments.CATEGORY_ID.name) ?: return@composable
+
+           //  val category = viewModel.selectedCategory // for entire model
+
+
+            if (category != null) {
+                CategoryProductsPage(categoryId = categoryId)
+            } else {
+                Box(Modifier
+                    .fillMaxSize()
+                    .background(White)) {
+                    TextComponent(textVal = "Loading...")
+                }
             }
         }
     }
