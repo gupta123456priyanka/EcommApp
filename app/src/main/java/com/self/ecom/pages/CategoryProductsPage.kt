@@ -52,7 +52,8 @@ import com.self.ecom.ui.theme.White
 import com.self.ecom.viewmodel.CategoryViewModel
 
 @Composable
-fun CategoryProductsPage(modifier: Modifier = Modifier, categoryId: String?) {
+fun CategoryProductsPage(modifier: Modifier = Modifier, categoryId: String?,
+                         onClickCategory: (String) -> Unit) {
     val c = LocalContext.current
     val viewModel: CategoryViewModel = viewModel(c as ComponentActivity)
 
@@ -75,7 +76,7 @@ fun CategoryProductsPage(modifier: Modifier = Modifier, categoryId: String?) {
             .get()
             .addOnCompleteListener { task: Task<QuerySnapshot?> ->
                 if (task.isSuccessful && task.result?.documents != null) {
-                  val   list = task.result?.documents?.mapNotNull { doc: DocumentSnapshot? ->
+                    val list = task.result?.documents?.mapNotNull { doc: DocumentSnapshot? ->
                         doc?.toObject(ProductModel::class.java)
                     }!!
                     productList = list
@@ -99,7 +100,8 @@ fun CategoryProductsPage(modifier: Modifier = Modifier, categoryId: String?) {
                     ProductItem(
                         item, modifier = Modifier
                             .weight(1f)
-                            .padding(8.dp)
+                            .padding(8.dp),
+                        onClickCategory = onClickCategory
                     )
                 }
                 if (rowItems.size == 1) { // added another empty composable for only 1 item in row
@@ -111,13 +113,16 @@ fun CategoryProductsPage(modifier: Modifier = Modifier, categoryId: String?) {
 }
 
 @Composable
-fun ProductItem(productModel: ProductModel, modifier: Modifier = Modifier) {
+fun ProductItem(
+    productModel: ProductModel, modifier: Modifier = Modifier,
+    onClickCategory: (String) -> Unit
+) {
 
     Card(
         modifier
             .clickable(onClick = {
 //                viewModel.selectedCategory.value = categoryModel // if we want to sen whole model
-//                onClickCategory(categoryModel) // if we want to send only few properties of model
+                onClickCategory(productModel.id) // if we want to send only few properties of model
             }),
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(4.dp),

@@ -6,7 +6,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -19,6 +18,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.self.ecom.component.TextComponent
 import com.self.ecom.pages.CategoryProductsPage
+import com.self.ecom.pages.ProductDetailPage
 import com.self.ecom.screens.AuthScreen
 import com.self.ecom.screens.HomeScreen
 import com.self.ecom.screens.LoginScreen
@@ -104,15 +104,44 @@ fun AppNavGraph(modifier: Modifier = Modifier) {
             val categoryId = backStackEntry
                 .arguments?.getString(ScreenArguments.CATEGORY_ID.name) ?: return@composable
 
-           //  val category = viewModel.selectedCategory // for entire model
+            //  val category = viewModel.selectedCategory // for entire model
 
 
             if (category != null) {
-                CategoryProductsPage(categoryId = categoryId)
+                CategoryProductsPage(categoryId = categoryId, onClickCategory = { id ->
+                    navController.navigate(Screens.Product_Details_Screen.createRoute(id))
+                })
             } else {
-                Box(Modifier
-                    .fillMaxSize()
-                    .background(White)) {
+                Box(
+                    Modifier
+                        .fillMaxSize()
+                        .background(White)
+                ) {
+                    TextComponent(textVal = "Loading...")
+                }
+            }
+        }
+        composable(
+            route = Screens.Product_Details_Screen.route,
+            arguments = listOf(
+                navArgument(name = ScreenArguments.PRODUCT_ID.name) {
+                    type = NavType.StringType
+                }
+            )) { backStackEntry ->
+
+            val productId = backStackEntry
+                .arguments?.getString(ScreenArguments.PRODUCT_ID.name) ?: return@composable
+
+            //  val category = viewModel.selectedCategory // for entire model
+
+            if (category != null) {
+                ProductDetailPage(productId = productId, onClickAddToCart = {})
+            } else {
+                Box(
+                    Modifier
+                        .fillMaxSize()
+                        .background(White)
+                ) {
                     TextComponent(textVal = "Loading...")
                 }
             }
