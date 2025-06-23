@@ -78,7 +78,8 @@ fun CategoryProductsPage(modifier: Modifier = Modifier, categoryId: String?) {
                   val   list = task.result?.documents?.mapNotNull { doc: DocumentSnapshot? ->
                         doc?.toObject(ProductModel::class.java)
                     }!!
-//                    productList = list.plus(list).plus(list).plus(list).plus(list)// for testing
+                    productList = list
+//                        .plus(list).plus(list).plus(list).plus(list)// for testing
 //                    viewModel.setAllCategories(productList)
                 } else {
                     AppUtil.showToast(msg = "products is null", context = context)
