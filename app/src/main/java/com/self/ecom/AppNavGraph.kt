@@ -108,9 +108,14 @@ fun AppNavGraph(modifier: Modifier = Modifier) {
 
 
             if (category != null) {
-                CategoryProductsPage(categoryId = categoryId, onClickCategory = { id ->
-                    navController.navigate(Screens.Product_Details_Screen.createRoute(id))
-                })
+                CategoryProductsPage(
+                    categoryId = categoryId, onClickCategory = { id: String ->
+                        navController.navigate(Screens.Product_Details_Screen.createRoute(id))
+                    },
+                    onClickAddToCart = { id: String ->
+                        AppUtil.showToast(msg = "id  =  $id", context = context)
+                        AppUtil.addItemToCart(productId = id.toString(), context = context)
+                    })
             } else {
                 Box(
                     Modifier
@@ -135,7 +140,9 @@ fun AppNavGraph(modifier: Modifier = Modifier) {
             //  val category = viewModel.selectedCategory // for entire model
 
             if (category != null) {
-                ProductDetailPage(productId = productId, onClickAddToCart = {})
+                ProductDetailPage(productId = productId, onClickAddToCart = {
+                    AppUtil.addItemToCart(productId = productId, context = context)
+                })
             } else {
                 Box(
                     Modifier

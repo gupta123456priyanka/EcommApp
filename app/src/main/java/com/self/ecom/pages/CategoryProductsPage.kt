@@ -52,8 +52,11 @@ import com.self.ecom.ui.theme.White
 import com.self.ecom.viewmodel.CategoryViewModel
 
 @Composable
-fun CategoryProductsPage(modifier: Modifier = Modifier, categoryId: String?,
-                         onClickCategory: (String) -> Unit) {
+fun CategoryProductsPage(
+    modifier: Modifier = Modifier, categoryId: String?,
+    onClickCategory: (String) -> Unit,
+    onClickAddToCart: (String) -> Unit
+) {
     val c = LocalContext.current
     val viewModel: CategoryViewModel = viewModel(c as ComponentActivity)
 
@@ -101,7 +104,8 @@ fun CategoryProductsPage(modifier: Modifier = Modifier, categoryId: String?,
                         item, modifier = Modifier
                             .weight(1f)
                             .padding(8.dp),
-                        onClickCategory = onClickCategory
+                        onClickCategory = onClickCategory,
+                        onClickAddToCart = onClickAddToCart
                     )
                 }
                 if (rowItems.size == 1) { // added another empty composable for only 1 item in row
@@ -115,7 +119,8 @@ fun CategoryProductsPage(modifier: Modifier = Modifier, categoryId: String?,
 @Composable
 fun ProductItem(
     productModel: ProductModel, modifier: Modifier = Modifier,
-    onClickCategory: (String) -> Unit
+    onClickCategory: (String) -> Unit,
+    onClickAddToCart: (String) -> Unit
 ) {
 
     Card(
@@ -175,7 +180,12 @@ fun ProductItem(
                     modifier = Modifier.padding(8.dp)
                 )
                 Spacer(Modifier.weight(1f)) // cart icon will be always on extreme right, this fills up all the space
-                IconButtonComposable(onClick = {}, imageVector = Icons.Filled.ShoppingCart)
+                val context =
+                    LocalContext.current
+                IconButtonComposable(
+                    onClick = { onClickAddToCart(productModel.id) },
+                    imageVector = Icons.Filled.ShoppingCart
+                )
             }
         }
     }
