@@ -155,23 +155,66 @@ fun ProductDetailPage(
                         .height(8.dp)
                         .fillMaxWidth()
                 )
+                if (!product.description.isEmpty()) {
+
+                    TextComponent(
+                        textVal = "Product description :",
+                        fontSizeVal = 16.sp,
+                        modifier = Modifier.wrapContentWidth(),
+                        fontWeight = FontWeight.SemiBold,
+                        textAlign = TextAlign.Start
+                    )
+                    Spacer(
+                        Modifier
+                            .height(8.dp)
+                            .fillMaxWidth()
+                    )
+                }
                 TextComponent(
-                    textVal = "Product description :",
+                    textVal = product.description,
                     fontSizeVal = 16.sp,
-                    modifier = Modifier.wrapContentWidth(),
-                    fontWeight = FontWeight.SemiBold,
-                    textAlign = TextAlign.Start
+                    textAlign = TextAlign.Justify,
                 )
                 Spacer(
                     Modifier
                         .height(8.dp)
                         .fillMaxWidth()
                 )
-                TextComponent(
-                    textVal = product.description,
-                    fontSizeVal = 16.sp,
-                    textAlign = TextAlign.Justify,
-                )
+                if (!product.otherDetails.isEmpty()) {
+
+                    TextComponent(
+                        textVal = "Other Product details :",
+                        fontSizeVal = 16.sp,
+                        modifier = Modifier.wrapContentWidth(),
+                        fontWeight = FontWeight.SemiBold,
+                        textAlign = TextAlign.Start
+                    )
+                    Spacer(
+                        Modifier
+                            .height(8.dp)
+                            .fillMaxWidth()
+                    )
+                }
+                product.otherDetails.forEach { (key, value) ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(4.dp)
+                    ) {
+                        TextComponent(
+                            textVal = key + " : ",
+                            fontSizeVal = 16.sp,
+                            modifier = Modifier.wrapContentWidth(),
+                            fontWeight = FontWeight.SemiBold,
+                            textAlign = TextAlign.Start
+                        )
+                        TextComponent(
+                            textVal = value,
+                            fontSizeVal = 14.sp,
+                            textAlign = TextAlign.Justify,
+                        )
+                    }
+                }
             }
         }
     }
