@@ -10,21 +10,31 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.self.ecom.R
 
 @Composable
 fun ImageComponent(
     modifier: Modifier = Modifier.fillMaxWidth(),
-    resourceValue: Int? = null
+    resourceValue: Int? = null,
+    url: String? = null,
+    contentDescription : String =""
 ) {
 
     Box() {
         resourceValue?.also {
             Image(
-                modifier = modifier ,
+                modifier = modifier,
                 painter = painterResource(resourceValue),
-                contentDescription = "",
+                contentDescription = contentDescription,
                 contentScale = ContentScale.Fit
+            )
+        }
+        url?.also {
+            AsyncImage(
+                model = url, contentDescription = contentDescription,
+                modifier = modifier,
+                contentScale = ContentScale.Crop
             )
         }
     }

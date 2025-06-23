@@ -1,7 +1,5 @@
 package com.self.ecom.screens
 
-import android.R.attr.name
-import android.R.attr.password
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,8 +24,8 @@ import com.self.ecom.component.ButtonComponent
 import com.self.ecom.component.ImageComponentMiddleScreen
 import com.self.ecom.component.OutlinedTextFieldComponent
 import com.self.ecom.component.SpacerComponent
-import com.self.ecom.component.TextComponentH1
-import com.self.ecom.component.TextComponentH2
+import com.self.ecom.component.TextComponentH1Black
+import com.self.ecom.component.TextComponentH2Black
 import com.self.ecom.viewmodel.AuthViewModel
 
 @Composable
@@ -49,9 +47,9 @@ fun SignupScreen(
         var name: String by remember { mutableStateOf("") }
         var isLoading: Boolean by remember { mutableStateOf(false) }
 
-        TextComponentH1(textVal = stringResource(R.string.hello_there))
+        TextComponentH1Black(textVal = stringResource(R.string.hello_there))
         SpacerComponent(heightVal = 10.dp)
-        TextComponentH2(textVal = stringResource(R.string.create_an_account))
+        TextComponentH2Black(textVal = stringResource(R.string.create_an_account))
         SpacerComponent(heightVal = 20.dp)
         ImageComponentMiddleScreen(R.drawable.ic_signup)
 
@@ -73,29 +71,35 @@ fun SignupScreen(
 
         ButtonComponent(textVal = "Signup", isFilled = true, onClick = {
             isLoading = true
-            authViewModel.signup(
-                context = context,
-                email = email,
-                password = password,
-                name = name,
-                onResult = { successOrFailureBoolean, errorMessage ->
-                    if (successOrFailureBoolean) {
-                        isLoading = false
-                        AppUtil.showToast(context, msg = "Success" ?: "Signup success")
-                        // go to console>authentication and check if user exits
-                        // also go to firestore database to check if data is in database
-                        // account is created
-                        onClickSignupBtn()
 
-                    } else {
+            if (email.isNotEmpty() && password.isNotEmpty()) {
+                authViewModel.signup(
+                    context = context,
+                    email = email,
+                    password = password,
+                    name = name,
+                    onResult = { successOrFailureBoolean, errorMessage ->
                         isLoading = false
-                        // account is not created
-                        AppUtil.showToast(
-                            context,
-                            msg = email + " " + errorMessage ?: "Signup failed"
-                        )
-                    }
-                })
+                        if (successOrFailureBoolean) {
+                            AppUtil.showToast(context, msg = "Success" ?: "Signup success")
+                            // go to console>authentication and check if user exits
+                            // also go to firestore database to check if data is in database
+                            // account is created
+                            onClickSignupBtn()
+
+                        } else {
+                            // account is not created
+                            AppUtil.showToast(
+                                context,
+                                msg = email + " " + errorMessage ?: "Signup failed"
+                            )
+                        }
+                    })
+            } else {
+                isLoading = false
+                AppUtil.showToast(context = context, msg = "email pwd null" ?: "Signup failed")
+            }
+
         }, isEnabled = !isLoading)
 //        if (isLoading) {
 //            Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {

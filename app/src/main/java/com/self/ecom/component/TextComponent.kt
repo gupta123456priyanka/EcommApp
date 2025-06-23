@@ -10,6 +10,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
+import com.self.ecom.ui.theme.Black
+import com.self.ecom.ui.theme.White
 
 @Composable
 fun TextComponent(
@@ -33,17 +35,55 @@ fun TextComponent(
 }
 
 @Composable
-fun TextComponentH1(textVal: String) {
+fun TextComponentH1Black(textVal: String, textColor: Color = Black) {
     TextComponent(
         textVal = textVal,
-        fontWeight = FontWeight.Bold, fontSizeVal = 30.sp
+        fontWeight = FontWeight.Bold, fontSizeVal = 30.sp, color = textColor
     )
 }
 
 @Composable
-fun TextComponentH2(textVal: String) {
+fun TextComponentH2Black(textVal: String, textColor: Color = Black) {
     TextComponent(
         textVal = textVal,
-        fontSizeVal = 22.sp
+        fontSizeVal = 22.sp,
+        color = textColor
+    )
+}
+
+@Composable
+fun TextComponentH3Black(textVal: String, textColor: Color = Black, modifier: Modifier = Modifier) {
+    TextComponent(
+        textVal = textVal,
+        fontSizeVal = 18.sp,
+        color = textColor,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun TextComponentH3White(textVal: String ) {
+    TextComponent(
+        textVal = textVal,
+        fontSizeVal = 10.sp,
+        color = White
+    )
+}
+
+@Composable
+fun TextComponentH4White(textVal: String ) {
+    TextComponent(
+        textVal = textVal,
+        fontSizeVal = 7.sp,
+        color = White,
+        textAlign = TextAlign.Center
+    )
+}
+@Composable
+fun TextComponentH2White(textVal: String ) {
+    TextComponent(
+        textVal = textVal,
+        fontSizeVal = 22.sp,
+        color = White
     )
 }
