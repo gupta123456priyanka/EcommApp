@@ -38,7 +38,11 @@ import com.self.ecom.ui.theme.Red
 
 @Composable
 fun HomeScreen(
-    modifier: Modifier = Modifier, logoutClick: () -> Unit, onClickCategory: (CategoryModel) -> Unit
+    modifier: Modifier = Modifier, logoutClick: () -> Unit,
+    onClickCategory: (CategoryModel) -> Unit,
+    onClickAddToCart: (String) -> Unit,
+    onClickRemoveFromCart: (String) -> Unit,
+    onClickRemoveAllCart: (String) -> Unit
 ) {
     var selectedIndex by remember { mutableStateOf(0) }
     var context = LocalContext.current
@@ -69,7 +73,10 @@ fun HomeScreen(
             logoutClick = logoutClick,
             modifier = Modifier.padding(innerPadding),
             selectedIndex = selectedIndex,
-            onClickCategory = onClickCategory
+            onClickCategory = onClickCategory,
+            onClickRemoveFromCart = onClickRemoveFromCart,
+            onClickAddToCart = onClickAddToCart,
+            onClickRemoveAllCart = onClickRemoveAllCart
         )
     }
 }
@@ -86,7 +93,10 @@ data class NavItems(val icon: ImageVector, val label: String)
 @Composable
 fun ContentScreen(
     modifier: Modifier = Modifier, logoutClick: () -> Unit, selectedIndex: Int,
-    onClickCategory: (CategoryModel) -> Unit
+    onClickCategory: (CategoryModel) -> Unit,
+    onClickAddToCart: (String) -> Unit,
+    onClickRemoveFromCart: (String) -> Unit,
+    onClickRemoveAllCart: (String) -> Unit
 ) {
     Column(
         Modifier
@@ -100,7 +110,13 @@ fun ContentScreen(
         when (selectedIndex) {
             0 -> HomePage(modifier, onClickCategory = onClickCategory)
             1 -> FavouritePage(modifier)
-            2 -> CartPage(modifier)
+            2 -> CartPage(
+                modifier,
+                onClickAddToCart = onClickAddToCart,
+                onClickRemoveFromCart = onClickRemoveFromCart,
+                onClickRemoveAllCart = onClickRemoveAllCart
+            )
+
             3 -> ProfilePage(modifier)
         }
 

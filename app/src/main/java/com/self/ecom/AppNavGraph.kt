@@ -47,20 +47,41 @@ fun AppNavGraph(modifier: Modifier = Modifier) {
         }
 
         composable(route = Screens.Home_Screen.route) {
-            HomeScreen(logoutClick = {
-                navController.navigate(Screens.Auth_Screen.route) {
-                    Firebase.auth.signOut()
-                    popUpTo(Screens.Home_Screen.route) {
-                        inclusive = true
+            HomeScreen(
+                logoutClick = {
+                    navController.navigate(Screens.Auth_Screen.route) {
+                        Firebase.auth.signOut()
+                        popUpTo(Screens.Home_Screen.route) {
+                            inclusive = true
+                        }
                     }
-                }
-            }, onClickCategory = { categoryModel ->
+                }, onClickCategory = { categoryModel ->
 //                navController.navigate(
 //                    route = Screens.CategoryProducts_Screen.route + "/${categoryModel.id}"
 //                )
-                navController.navigate(Screens.CategoryProducts_Screen.createRoute(categoryModel.id))
+                    navController.navigate(Screens.CategoryProducts_Screen.createRoute(categoryModel.id))
 
-            })
+                },
+                onClickAddToCart = { productId ->
+                    AppUtil.addItemToCart(
+                        context = context,
+                        productId = productId
+                    )
+                },
+                onClickRemoveFromCart = { productId ->
+                    AppUtil.removeItemFromCart(
+                        context = context,
+                        productId = productId
+                    )
+                },
+                onClickRemoveAllCart = { productId ->
+                    AppUtil.removeItemFromCart(
+                        context = context,
+                        productId = productId,
+                        removeAll = true
+                    )
+
+                })
         }
         composable(route = Screens.Signup_Screen.route) {
             SignupScreen(
