@@ -81,7 +81,8 @@ fun AppNavGraph(modifier: Modifier = Modifier) {
                         removeAll = true
                     )
 
-                })
+                },
+                onClickCheckout = {})
         }
         composable(route = Screens.Signup_Screen.route) {
             SignupScreen(

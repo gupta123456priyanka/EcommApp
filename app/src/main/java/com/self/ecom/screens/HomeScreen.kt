@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -34,6 +35,7 @@ import com.self.ecom.pages.FavouritePage
 import com.self.ecom.pages.HomePage
 import com.self.ecom.pages.ProfilePage
 import com.self.ecom.ui.theme.Blue30
+import com.self.ecom.ui.theme.Pink40
 import com.self.ecom.ui.theme.Red
 
 @Composable
@@ -42,15 +44,16 @@ fun HomeScreen(
     onClickCategory: (CategoryModel) -> Unit,
     onClickAddToCart: (String) -> Unit,
     onClickRemoveFromCart: (String) -> Unit,
-    onClickRemoveAllCart: (String) -> Unit
+    onClickRemoveAllCart: (String) -> Unit,
+    onClickCheckout: () -> Unit
 ) {
     var selectedIndex by remember { mutableStateOf(0) }
     var context = LocalContext.current
-    Scaffold(bottomBar = {
+    Scaffold(modifier = Modifier.background(Pink40).fillMaxSize(),bottomBar = {
         NavigationBar(
             containerColor = Red,
             tonalElevation = 0.dp,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().height(100.dp)
         ) {
             listOfNavItems().forEachIndexed { index, item ->
                 NavigationBarItem(
@@ -71,12 +74,15 @@ fun HomeScreen(
     }) { innerPadding ->
         ContentScreen(
             logoutClick = logoutClick,
-            modifier = Modifier.padding(innerPadding),
+            modifier = Modifier.padding(innerPadding)
+                .background(BG_COLOR)
+            ,
             selectedIndex = selectedIndex,
             onClickCategory = onClickCategory,
             onClickRemoveFromCart = onClickRemoveFromCart,
             onClickAddToCart = onClickAddToCart,
-            onClickRemoveAllCart = onClickRemoveAllCart
+            onClickRemoveAllCart = onClickRemoveAllCart,
+            onClickCheckout = onClickCheckout
         )
     }
 }
@@ -96,12 +102,13 @@ fun ContentScreen(
     onClickCategory: (CategoryModel) -> Unit,
     onClickAddToCart: (String) -> Unit,
     onClickRemoveFromCart: (String) -> Unit,
-    onClickRemoveAllCart: (String) -> Unit
+    onClickRemoveAllCart: (String) -> Unit,
+    onClickCheckout: () -> Unit
 ) {
     Column(
-        Modifier
+        modifier
             .fillMaxSize()
-            .background(BG_COLOR)
+//            .background(BG_COLOR)
     ) {
         TextComponent(textVal = "HomeScreen")
         ButtonComponent(
@@ -114,7 +121,8 @@ fun ContentScreen(
                 modifier,
                 onClickAddToCart = onClickAddToCart,
                 onClickRemoveFromCart = onClickRemoveFromCart,
-                onClickRemoveAllCart = onClickRemoveAllCart
+                onClickRemoveAllCart = onClickRemoveAllCart,
+                onClickCheckout = onClickCheckout
             )
 
             3 -> ProfilePage(modifier)

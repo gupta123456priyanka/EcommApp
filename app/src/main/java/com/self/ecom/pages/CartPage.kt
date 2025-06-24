@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -39,6 +40,7 @@ import androidx.compose.ui.unit.sp
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
+import com.self.ecom.component.ButtonComponent
 import com.self.ecom.component.IconButtonComposable
 import com.self.ecom.component.ImageComponent
 import com.self.ecom.component.SpacerComponent
@@ -54,7 +56,8 @@ fun CartPage(
     modifier: Modifier = Modifier,
     onClickAddToCart: (String) -> Unit,
     onClickRemoveFromCart: (String) -> Unit,
-    onClickRemoveAllCart: (String) -> Unit
+    onClickRemoveAllCart: (String) -> Unit,
+    onClickCheckout: () -> Unit
 ) {
     var usermodel by remember { mutableStateOf(UserModel()) }
 
@@ -82,30 +85,54 @@ fun CartPage(
                }
            }*/
     }
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(White)
-            .padding(16.dp)
+            .padding(16.dp
+//                , bottom = 150.dp
+            )
     ) {
-        TextComponentH2Black(textVal = "Your Cart  ")
-        LazyColumn(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(White)
-                .padding(4.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+                .padding(bottom = 70.dp) // reserve space for the button
         ) {
-            // it.first means first param i.e. productId
-            items(usermodel.cartItems.toList(), key = {it.first}) { (productId, qty) ->
-                CartItemView(
-                    modifier = Modifier, productId = productId,
-                    qty = qty, onClickAddToCart = onClickAddToCart,
-                    onClickCategory = {},
-                    onClickRemoveFromCart = onClickRemoveFromCart,
-                    onClickRemoveAllCart = onClickRemoveAllCart
-                )
+            TextComponentH2Black(textVal = "Your Cart")
+
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize(), // fills remaining space
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(usermodel.cartItems.toList(), key = { it.first }) { (productId, qty) ->
+                    CartItemView(
+                        modifier = Modifier,
+                        productId = productId,
+                        qty = qty,
+                        onClickAddToCart = onClickAddToCart,
+                        onClickCategory = {},
+                        onClickRemoveFromCart = onClickRemoveFromCart,
+                        onClickRemoveAllCart = onClickRemoveAllCart,
+                        onClickCheckout = onClickCheckout
+                    )
+                }
             }
+        }
+
+        // Sticky Button at bottom
+        Column(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .background( White)
+                .padding(top = 8.dp)
+        ) {
+            ButtonComponent(
+                textVal = "Checkout",
+                isFilled = false,
+                onClick = onClickCheckout,
+                isEnabled = true,
+            )
         }
     }
 }
@@ -117,7 +144,8 @@ fun CartItemView(
     onClickCategory: (String) -> Unit,
     onClickAddToCart: (String) -> Unit,
     onClickRemoveFromCart: (String) -> Unit,
-    onClickRemoveAllCart: (String) -> Unit
+    onClickRemoveAllCart: (String) -> Unit,
+    onClickCheckout: () -> Unit
 ) {
     var productModel by remember {
         mutableStateOf(ProductModel())
@@ -147,9 +175,12 @@ fun CartItemView(
             contentColor = MaterialTheme.colorScheme.primary
         )
     ) {
-        Row(modifier = Modifier.padding(8.dp), verticalAlignment = Alignment.CenterVertically) {
-
-
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(1f)
+                .padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             ImageComponent(
                 url = productModel.images.firstOrNull(),
                 modifier = Modifier
@@ -226,5 +257,7 @@ fun CartItemView(
             )
         }
     }
+
+    SpacerComponent(heightVal = 10.dp)
 }
 
