@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.implementation
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -79,4 +81,6 @@ dependencies {
 //    implementation(libs.hilt)
 //    kapt(libs.hilt.compiler)
 //    implementation(libs.hilt.navigation.compose)
+
+    implementation ("com.razorpay:checkout:1.6.33")
 }

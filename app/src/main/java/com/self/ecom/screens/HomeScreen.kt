@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -45,9 +46,16 @@ fun HomeScreen(
     onClickAddToCart: (String) -> Unit,
     onClickRemoveFromCart: (String) -> Unit,
     onClickRemoveAllCart: (String) -> Unit,
-    onClickCheckout: () -> Unit
+    onClickCheckout: () -> Unit,
+    onClickMyOrders :()->Unit,
+    onClickSignout: () -> Unit
 ) {
-    var selectedIndex by remember { mutableStateOf(0) }
+//    var selectedIndex by remember { mutableStateOf(0) }
+    var selectedIndex by rememberSaveable { mutableStateOf(0) }
+    // when we go from cart screen's "checkout btn" to checkout screeen and then go back,
+    // we come on home screen, instead of cart screen, which is wrong, we should come to the cart screen only
+    //it is because we are setting selectedIndex as 0 , so every time we sgo to any page, it is set to 0
+    // So to fix, use remember savable
     var context = LocalContext.current
     Scaffold(modifier = Modifier.background(Pink40).fillMaxSize(),bottomBar = {
         NavigationBar(
@@ -82,7 +90,9 @@ fun HomeScreen(
             onClickRemoveFromCart = onClickRemoveFromCart,
             onClickAddToCart = onClickAddToCart,
             onClickRemoveAllCart = onClickRemoveAllCart,
-            onClickCheckout = onClickCheckout
+            onClickCheckout = onClickCheckout,
+            onClickMyOrders = onClickMyOrders,
+            onClickSignout = onClickSignout
         )
     }
 }
@@ -103,7 +113,9 @@ fun ContentScreen(
     onClickAddToCart: (String) -> Unit,
     onClickRemoveFromCart: (String) -> Unit,
     onClickRemoveAllCart: (String) -> Unit,
-    onClickCheckout: () -> Unit
+    onClickCheckout: () -> Unit,
+    onClickMyOrders :()->Unit,
+    onClickSignout: () -> Unit
 ) {
     Column(
         modifier
@@ -125,7 +137,7 @@ fun ContentScreen(
                 onClickCheckout = onClickCheckout
             )
 
-            3 -> ProfilePage(modifier)
+            3 -> ProfilePage(modifier, onClickMyOrders = onClickMyOrders, onClickSignout = onClickSignout)
         }
 
     }

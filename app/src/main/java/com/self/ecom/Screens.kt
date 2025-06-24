@@ -15,6 +15,10 @@ sealed class Screens(val route: String) {
     ) {
         fun createRoute(categoryId: String) = "${Route.PRODUCT_DETAIL.name}/$categoryId"
     }
+
+    data object Checkout_Screen : Screens(route = Route.CHECKOUT_PAGE.name)
+    data object OrderSuccess_Screen : Screens(route = Route.orderSuccessScreen.name)
+    data object OrdersPage_Screen : Screens(route = Route.OrdersPage.name)
 }
 
 enum class Route {
@@ -23,7 +27,10 @@ enum class Route {
     SIGNUP_SCREEN,
     LOGIN_SCREEN,
     CATEGORY_PRODUCTS,
-    PRODUCT_DETAIL
+    PRODUCT_DETAIL,
+    CHECKOUT_PAGE,
+    orderSuccessScreen,
+    OrdersPage
 }
 
 enum class ScreenArguments(value: String) {

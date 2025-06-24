@@ -92,6 +92,16 @@ fun TextComponentH3Black(textVal: String, textColor: Color = Black, modifier: Mo
 }
 
 @Composable
+fun TextComponentH4Black(textVal: String, textColor: Color = Black, modifier: Modifier = Modifier) {
+    TextComponent(
+        textVal = textVal,
+        fontSizeVal = 14.sp,
+        color = textColor,
+        modifier = modifier
+    )
+}
+
+@Composable
 fun TextComponentH3White(textVal: String) {
     TextComponent(
         textVal = textVal,

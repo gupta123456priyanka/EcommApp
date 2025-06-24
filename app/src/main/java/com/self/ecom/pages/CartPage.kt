@@ -44,6 +44,7 @@ import com.self.ecom.component.ButtonComponent
 import com.self.ecom.component.IconButtonComposable
 import com.self.ecom.component.ImageComponent
 import com.self.ecom.component.SpacerComponent
+import com.self.ecom.component.TextComponent
 import com.self.ecom.component.TextComponentH2Black
 import com.self.ecom.component.TextComponentMoreParams
 import com.self.ecom.model.ProductModel
@@ -88,7 +89,8 @@ fun CartPage(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp
+            .padding(
+                16.dp
 //                , bottom = 150.dp
             )
     ) {
@@ -99,40 +101,61 @@ fun CartPage(
         ) {
             TextComponentH2Black(textVal = "Your Cart")
 
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize(), // fills remaining space
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(usermodel.cartItems.toList(), key = { it.first }) { (productId, qty) ->
-                    CartItemView(
-                        modifier = Modifier,
-                        productId = productId,
-                        qty = qty,
-                        onClickAddToCart = onClickAddToCart,
-                        onClickCategory = {},
-                        onClickRemoveFromCart = onClickRemoveFromCart,
-                        onClickRemoveAllCart = onClickRemoveAllCart,
-                        onClickCheckout = onClickCheckout
-                    )
+            if (usermodel.cartItems.isNotEmpty()) {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize(), // fills remaining space
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(usermodel.cartItems.toList(), key = { it.first }) { (productId, qty) ->
+                        CartItemView(
+                            modifier = Modifier,
+                            productId = productId,
+                            qty = qty,
+                            onClickAddToCart = onClickAddToCart,
+                            onClickCategory = {},
+                            onClickRemoveFromCart = onClickRemoveFromCart,
+                            onClickRemoveAllCart = onClickRemoveAllCart,
+                            onClickCheckout = onClickCheckout
+                        )
+                    }
+                }
+            } else {
+                Box(
+                    Modifier
+                        .fillMaxSize()
+                        .background(White),
+
+                    ) {
+                    Column(
+                        Modifier
+                            .fillMaxSize(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+
+                        TextComponent(textVal = "No items here", fontSizeVal = 40.sp)
+                    }
                 }
             }
-        }
 
-        // Sticky Button at bottom
-        Column(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .background( White)
-                .padding(top = 8.dp)
-        ) {
-            ButtonComponent(
-                textVal = "Checkout",
-                isFilled = false,
-                onClick = onClickCheckout,
-                isEnabled = true,
-            )
+        }
+        if (usermodel.cartItems.isNotEmpty()) {
+
+            Column(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+                    .background(White)
+                    .padding(top = 8.dp)
+            ) {
+                ButtonComponent(
+                    textVal = "Checkout",
+                    isFilled = false,
+                    onClick = onClickCheckout,
+                    isEnabled = true,
+                )
+            }
         }
     }
 }
